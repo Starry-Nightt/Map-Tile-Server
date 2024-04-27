@@ -42,7 +42,7 @@ namespace map_tile_server.Controllers
             if (user != null)
             {
                 var tokenString = GenerateToken(user);
-                return Ok(new LoginSuccessDetail(tokenString));
+                return Ok(new SuccessDetail<LoginSuccessDetail>(new LoginSuccessDetail { Token = tokenString}) );
             }
             return Unauthorized(new ErrorDetail((int)HttpStatusCode.Unauthorized, "Email or password is not correct"));
         }

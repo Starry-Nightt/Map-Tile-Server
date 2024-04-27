@@ -3,7 +3,6 @@ using map_tile_server.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.ConfigureCors();
 builder.Services.ConfigureJwtAuthentication(builder.Configuration);
 builder.Services.ConfigureMongoDatabaseSettings(builder.Configuration);
 builder.Services.ConfigureMapTileServer(builder.Configuration);
@@ -23,7 +22,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.ConfigureCustomExceptionMiddleware();
+app.UseConfigureCustomExceptionMiddleware();
+
+app.UseConfiguredCors();
 
 app.UseHttpsRedirection();
 

@@ -15,17 +15,6 @@ namespace map_tile_server.Extensions
 {
     public static class ServiceExtensions
     {
-        public static void ConfigureCors(this IServiceCollection services)
-        {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader());
-            });
-        }
-
         public static void ConfigureJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -75,9 +64,14 @@ namespace map_tile_server.Extensions
 
         }
 
-        public static void ConfigureCustomExceptionMiddleware(this WebApplication app)
+        public static void UseConfigureCustomExceptionMiddleware(this WebApplication app)
         {
             app.UseMiddleware<ExceptionMiddleware>();
+        }
+
+        public static void UseConfiguredCors(this WebApplication app)
+        {
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
         }
 
         public static void ConfigureServices(this IServiceCollection services)

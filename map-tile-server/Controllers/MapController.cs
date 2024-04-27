@@ -15,8 +15,8 @@ namespace map_tile_server.Controllers
 
         }
 
-        [Authorize(Roles = "user, admin")]
         [HttpGet("{z}/{x}/{y}.png")]
+        [Authorize(Roles = "user, admin")]
         public async Task<IActionResult> GetTile(int z, int x, int y)
         {
             byte[] tile = await _mapService.GetTile(z, x, y);
