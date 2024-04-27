@@ -89,6 +89,7 @@ namespace map_tile_server.Extensions
             });
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IHelperService, HelperService>();
+            services.AddSingleton<IMapService, MapService>();
             services.AddControllers();
         }
     }
