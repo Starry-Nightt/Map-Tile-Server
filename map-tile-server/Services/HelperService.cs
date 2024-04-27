@@ -1,6 +1,4 @@
-﻿using map_tile_server.Interfaces;
-
-namespace map_tile_server.Services
+﻿namespace map_tile_server.Services
 {
     public class HelperService: IHelperService
     {
@@ -9,7 +7,7 @@ namespace map_tile_server.Services
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
-        public bool VerifyPassword(string hash, string password)
+        public bool VerifyPassword(string password, string hash)
         {
             return BCrypt.Net.BCrypt.Verify(password, hash);
         }

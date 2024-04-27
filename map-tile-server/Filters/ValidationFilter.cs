@@ -1,10 +1,6 @@
 ﻿
-using map_tile_server.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Serilog;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace map_tile_server.Filters
 {

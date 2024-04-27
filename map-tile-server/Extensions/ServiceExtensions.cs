@@ -1,5 +1,4 @@
 ﻿using map_tile_server.Filters;
-using map_tile_server.Interfaces;
 using map_tile_server.Middlewares;
 using map_tile_server.Models.Configurations;
 using map_tile_server.Services;
@@ -42,6 +41,8 @@ namespace map_tile_server.Extensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:Key")))
                 };
             });
+            services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+            services.AddSingleton<IJwtSettings>(s => s.GetRequiredService<IOptions<JwtSettings>>().Value);
         }
 
         public static void ConfigureMongoDatabaseSettings(this IServiceCollection services, IConfiguration configuration)

@@ -1,4 +1,4 @@
-﻿namespace map_tile_server.Interfaces
+﻿namespace map_tile_server.Models.Configurations
 {
     public interface IDatabaseSettings
     {

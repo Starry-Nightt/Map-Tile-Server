@@ -1,7 +1,7 @@
 ﻿using map_tile_server.Models.Details;
 using map_tile_server.Models.Entities;
 
-namespace map_tile_server.Interfaces
+namespace map_tile_server.Services
 {
     public interface IUserService
     {
@@ -13,5 +13,6 @@ namespace map_tile_server.Interfaces
         UserDetail Create(User user);
         void Update(string id, User user);
         void Delete(string id);
+
     }
 }

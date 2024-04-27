@@ -1,10 +1,11 @@
 ﻿using map_tile_server.Filters;
-using map_tile_server.Interfaces;
 using map_tile_server.Models.Commons;
 using map_tile_server.Models.Details;
 using map_tile_server.Models.Entities;
+using map_tile_server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
+using System.Data;
 using System.Net;
 
 namespace map_tile_server.Controllers
@@ -23,6 +24,7 @@ namespace map_tile_server.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public IActionResult Gets()
         {
             var users = _userService.Gets();
@@ -30,6 +32,7 @@ namespace map_tile_server.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult GetById(string id)
         {
 
@@ -44,6 +47,7 @@ namespace map_tile_server.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ServiceFilter(typeof(ValidationFilter))]
         public IActionResult Post([FromBody] UserCreateDetail detail)
         {
@@ -63,7 +67,7 @@ namespace map_tile_server.Controllers
         }
 
         [HttpPut("{id}")]
-        [ServiceFilter(typeof(ValidationFilter))]
+        [Authorize(Roles = "admin,user")]
         public IActionResult Put(string id, [FromBody] UserUpdateDetail detail)
         {
 
@@ -97,6 +101,7 @@ namespace map_tile_server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin, user")]
         public IActionResult Delete(string id)
         {
 

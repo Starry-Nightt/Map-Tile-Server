@@ -2,7 +2,7 @@
 
 namespace map_tile_server.Models.Details
 {
-    public class UserCreateDetail
+    public class RegisterDetail
     {
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; } = String.Empty;
@@ -12,19 +12,7 @@ namespace map_tile_server.Models.Details
         public string FirstName { get; set; } = String.Empty;
         [Required(ErrorMessage = "Last name is required")]
         public string LastName { get; set; } = String.Empty;
-        [Required(ErrorMessage = "Role is required")]
-        public string Role { get; set; } = String.Empty;
         [Required(ErrorMessage = "Username is required")]
         public string Username { get; set; } = String.Empty;
-
-        public UserCreateDetail(RegisterDetail detail)
-        {
-            Email = detail.Email;
-            Password = detail.Password;
-            FirstName = detail.FirstName;
-            LastName = detail.LastName;
-            Role = "user";
-            Username = detail.Username;
-        }
     }
 }

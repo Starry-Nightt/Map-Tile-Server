@@ -1,4 +1,4 @@
-﻿using map_tile_server.Interfaces;
+﻿using map_tile_server.Models.Configurations;
 using map_tile_server.Models.Details;
 using map_tile_server.Models.Entities;
 using MongoDB.Driver;
