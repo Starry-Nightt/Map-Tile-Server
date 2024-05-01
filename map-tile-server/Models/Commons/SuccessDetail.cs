@@ -14,6 +14,13 @@
 
     public class LoginSuccessDetail
     {
+        public bool Success { get; set; }
         public string Token { get; set; } = string.Empty;
+
+        public LoginSuccessDetail(string token)
+        {
+            Success = true;
+            Token = token;
+        }
     }
 }

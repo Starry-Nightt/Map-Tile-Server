@@ -7,6 +7,7 @@ using map_tile_server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -42,7 +43,7 @@ namespace map_tile_server.Controllers
             if (user != null)
             {
                 var tokenString = GenerateToken(user);
-                return Ok(new SuccessDetail<LoginSuccessDetail>(new LoginSuccessDetail { Token = tokenString}) );
+                return Ok(new LoginSuccessDetail(tokenString));
             }
             return Unauthorized(new ErrorDetail((int)HttpStatusCode.Unauthorized, "Email or password is not correct"));
         }
@@ -71,7 +72,7 @@ namespace map_tile_server.Controllers
         public IActionResult GetUserInfo()
         {
             var userInfo = GetCurrentUser();
-            if (userInfo == null) return Unauthorized(new ErrorDetail((int)HttpStatusCode.Unauthorized, "Invalid token"));
+            if (userInfo == null || userInfo.Id == null) return Unauthorized(new ErrorDetail((int)HttpStatusCode.Unauthorized, "Invalid token"));
             User user = _userService.GetById(userInfo.Id);
             var userDetail = new UserDetail(user);
             return Ok(new SuccessDetail<UserDetail>(userDetail));
@@ -125,7 +126,7 @@ namespace map_tile_server.Controllers
         private ClaimDetail? GetCurrentUser()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            if (identity != null)
+            if (identity != null || IsTokenExpired())
             {
                 var claims = identity.Claims;
                 return new ClaimDetail
@@ -150,6 +151,18 @@ namespace map_tile_server.Controllers
             var userTemp = _userService.GetByUsername(email);
             if (userTemp == null) return false;
             return true;
+        }
+
+        private bool IsTokenExpired()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity == null) return true;
+            var claim = identity.Claims;
+            var tokenExp = claim.FirstOrDefault(claim => claim.Type.Equals("exp")).Value;
+            var ticks = long.Parse(tokenExp);
+            var tokenDate = DateTimeOffset.FromUnixTimeSeconds(ticks).UtcDateTime;
+            var now = DateTime.Now.ToUniversalTime();
+            return tokenDate < now;
         }
     }
 }
