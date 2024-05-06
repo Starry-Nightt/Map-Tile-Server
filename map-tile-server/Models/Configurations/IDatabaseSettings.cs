@@ -6,5 +6,6 @@
         public string DatabaseName { get; set; }
         public string UserCollectionName { get; set; }
         public string GeoCollectionName { get; set; }
+        public string LocationCollectionName { get; set; }
     }
 }

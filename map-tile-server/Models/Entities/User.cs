@@ -10,17 +10,17 @@ namespace map_tile_server.Models.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
         [BsonElement("email")]
-        public string Email { get; set; } = String.Empty;
+        public string Email { get; set; } = string.Empty;
         [BsonElement("password")]
-        public string Password { get; set; } = String.Empty;
+        public string Password { get; set; } = string.Empty;
         [BsonElement("role")]
-        public string Role { get; set; } = String.Empty;
+        public string Role { get; set; } = string.Empty;
         [BsonElement("username")]
-        public string Username { get; set; } = String.Empty;
+        public string Username { get; set; } = string.Empty;
         [BsonElement("first_name")]
-        public string FirstName { get; set; } = String.Empty;
+        public string FirstName { get; set; } = string.Empty;
         [BsonElement("last_name")]
-        public string LastName { get; set; } = String.Empty;
+        public string LastName { get; set; } = string.Empty;
 
         public User(UserCreateDetail data)
         {

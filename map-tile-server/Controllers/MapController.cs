@@ -58,5 +58,12 @@ namespace map_tile_server.Controllers
             _mapService.DeleteAll(userId);
             return Ok();
         }
+
+        [HttpGet("location/{key}")]
+        public IActionResult FindLocation(string key)
+        {
+            var locations = _mapService.GetLocations(key);
+            return Ok(new SuccessDetail<List<Location>>(locations));
+        }
     }
 }
