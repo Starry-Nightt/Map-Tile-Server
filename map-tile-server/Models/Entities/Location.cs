@@ -33,5 +33,7 @@ namespace map_tile_server.Models.Entities
 
         [BsonElement("population_proper")]
         public string PopulationProper { get; set; } = string.Empty;
+        [BsonElement("score")]
+        public int? Score { get; set; }
     }
 }

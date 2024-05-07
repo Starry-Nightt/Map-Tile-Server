@@ -65,33 +65,44 @@ namespace map_tile_server.Services
         {
             string[] splits = Regex.Split(key, @"(\s+|\p{P})").Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
             string[] words = splits.Where(x => Regex.IsMatch(x, "^[a-zA-Z]+$")).Select(word => word.ToLower()).ToArray();
-            List<Location> locations = _locationCollection.Find(l => words.Length != 0).ToList();
-            List<Location> res = locations.Where(l => IsMatchCity(words, l)).ToList();
-            return res;
+            if (words.Length == 0) return new List<Location>();
+            List<Location> locations = _locationCollection.Find(FilterDefinition<Location>.Empty).ToList();
+            List<Location> locaitonsWithScore = locations.Select(l => LocationScoreByKey(words, l)).ToList();
+            GFG gg = new GFG();
+            locaitonsWithScore.Sort(gg);
+            return locaitonsWithScore.Take(5).ToList();
 
         }
 
-        private bool IsMatchCity(string[] words, Location location)
+        private Location LocationScoreByKey(string[] words, Location l)
         {
-            string[] wordsCity = location.City.Split(' ').Select(w => w.ToLower()).ToArray();
-            string[] wordsAdminName = location.AdminName.Split(' ').Select(w => w.ToLower()).ToArray();
+            string[] cityKey = l.City.ToLower().Split(' ').ToArray();
+            int cnt = 0;
             foreach (string word in words)
             {
-                if (IsCityContainWord(wordsCity, word)) {
-                    return true;
+                foreach (string key in cityKey)
+                {
+                    if (key.StartsWith(word)) cnt++;
                 }
-
             }
-            return false;
+            l.Score = cnt;
+            return l;
         }
+    }
 
-        private bool IsCityContainWord(string[] arr, string keyword)
+    class GFG : IComparer<Location>
+    {
+        public int Compare(Location x, Location y)
         {
-            foreach (string str in arr)
+            if (x == null || y == null || x.Score == null || y.Score == null)
             {
-                if (str.StartsWith(keyword)) return true;
+                return 0;
             }
-            return false;
+            int scoreX = (int)x.Score;
+            int scoreY = (int)y.Score;
+
+            return scoreY.CompareTo(scoreX);
+
         }
     }
 }
