@@ -63,12 +63,12 @@ namespace map_tile_server.Services
 
         public List<Location> GetLocations(string key)
         {
-            string[] splits = Regex.Split(key, @"(\s+|\p{P})").Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-            string[] words = splits.Where(x => Regex.IsMatch(x, "^[a-zA-Z]+$")).Select(word => word.ToLower()).ToArray();
+            string[] words = key.ToLower().Split(' ').ToArray();
             if (words.Length == 0) return new List<Location>();
             List<Location> locations = _locationCollection.Find(FilterDefinition<Location>.Empty).ToList();
             List<Location> locaitonsWithScore = locations.Select(l => LocationScoreByKey(words, l)).ToList();
             GFG gg = new GFG();
+            Log.Information("{@locations} {@key}", locations, key);
             locaitonsWithScore.Sort(gg);
             return locaitonsWithScore.Take(5).ToList();
 
