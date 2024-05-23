@@ -4,11 +4,13 @@ using map_tile_server.Models.Configurations;
 using map_tile_server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using Serilog;
 using Serilog.Formatting.Json;
+using System;
 using System.Text;
 
 namespace map_tile_server.Extensions
@@ -47,17 +49,23 @@ namespace map_tile_server.Extensions
             services.AddSingleton<ITileServerSettings>(s => s.GetRequiredService<IOptions<TileServerSettings>>().Value);
         }
 
+        public static void ConfigureOsmDatabaseSettings(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<OsmDatabaseSettings>(configuration.GetSection("OsmDatabaseSettings"));
+            services.AddSingleton<IOsmDatabaseSettings>(s => s.GetRequiredService<IOptions<OsmDatabaseSettings>>().Value);
+        }
         public static void AddLogger(this IServiceCollection services, IHostBuilder host)
         {
             Log.Logger = new LoggerConfiguration().WriteTo.Console(new JsonFormatter()).CreateLogger();
             try
             {
-                Log.Information("Add logger");
                 host.UseSerilog((ctx, lc) => lc.WriteTo.Console());
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Log.Fatal(ex, "Host terminated unexpectedly");
-            } finally
+            }
+            finally
             {
                 Log.CloseAndFlush();
             }
@@ -84,7 +92,7 @@ namespace map_tile_server.Extensions
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IHelperService, HelperService>();
             services.AddSingleton<IMapService, MapService>();
-            services.AddControllers();
+            services.AddSingleton<IOsmService, OsmService>();
         }
     }
 }

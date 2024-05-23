@@ -2,12 +2,16 @@ using map_tile_server.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configure Extension
 builder.Services.ConfigureJwtAuthentication(builder.Configuration);
+builder.Services.AddLogger(builder.Host);
+// Configure Database
 builder.Services.ConfigureMongoDatabaseSettings(builder.Configuration);
 builder.Services.ConfigureMapTileServer(builder.Configuration);
-builder.Services.AddLogger(builder.Host);
+builder.Services.ConfigureOsmDatabaseSettings(builder.Configuration);
+// Add services to the container.
 builder.Services.ConfigureServices();
+builder.Services.AddControllers();
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

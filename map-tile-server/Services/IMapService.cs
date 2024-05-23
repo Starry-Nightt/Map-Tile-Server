@@ -14,6 +14,5 @@ namespace map_tile_server.Services
         void Delete(string id);
 
         void DeleteAll(string userId);
-        List<Location> GetLocations(string key);
     }
 }
