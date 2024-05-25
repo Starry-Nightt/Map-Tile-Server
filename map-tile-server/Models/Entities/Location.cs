@@ -2,7 +2,9 @@
 {
     public class Location
     {
-        public string Amenity { get; set; } = string.Empty;
+        public string Id { get; set; } = String.Empty;
         public string Name { get; set; } = string.Empty;
+        public double Lng { get; set; }
+        public double Lat { get; set; }
     }
 }
