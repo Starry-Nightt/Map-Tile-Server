@@ -1,8 +1,11 @@
-﻿using map_tile_server.Models.Commons;
+﻿using map_tile_server.Filters;
+using map_tile_server.Models.Commons;
 using map_tile_server.Models.Details;
 using map_tile_server.Models.Entities;
 using map_tile_server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace map_tile_server.Controllers
 {
@@ -17,6 +20,7 @@ namespace map_tile_server.Controllers
         }
 
         [HttpGet("location")]
+        [Authorize(Roles = "admin, user")]
         public async Task<IActionResult> SearchLocation(string? key)
         {
             var result = await _osmService.SearchLocation(key);
@@ -24,6 +28,8 @@ namespace map_tile_server.Controllers
         }
 
         [HttpPost("routing")]
+        [Authorize(Roles = "admin, user")]
+        [ServiceFilter(typeof(ValidationFilter))]
         public async Task<IActionResult> GetRoute([FromBody] RoutingRequestDetail detail)
         {
             var result = await _osmService.GetRoute(detail.startLat, detail.startLng, detail.endLat, detail.endLng);

@@ -1,4 +1,5 @@
-﻿using map_tile_server.Models.Commons;
+﻿using map_tile_server.Filters;
+using map_tile_server.Models.Commons;
 using map_tile_server.Models.Details;
 using map_tile_server.Models.Entities;
 using map_tile_server.Services;
@@ -39,6 +40,7 @@ namespace map_tile_server.Controllers
         }
 
         [HttpPost("{userId}")]
+        [ServiceFilter(typeof(ValidationFilter))]
         public IActionResult Post(string userId, [FromBody] GeoCreateDetail detail)
         {
             var geoData = _mapService.Create(userId, detail);
