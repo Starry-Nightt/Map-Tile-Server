@@ -24,11 +24,11 @@ namespace map_tile_server.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin")]
-        public IActionResult Gets()
+        public IActionResult Gets( int page, int pageSize, string key = "")
         {
-            var users = _userService.Gets();
-            return Ok(new SuccessDetail<List<UserDetail>>(users));
+            var users = _userService.Gets(page, pageSize, key);
+            var count = _userService.GetCount(key);
+            return Ok(new ListSuccessDetail<UserDetail>(users, count));
         }
 
         [HttpGet("{id}")]

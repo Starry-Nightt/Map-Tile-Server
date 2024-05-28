@@ -23,4 +23,18 @@
             Token = token;
         }
     }
+
+    public class ListSuccessDetail<T>
+    {
+        public bool Success { get; set; }
+        public List<T> Data { get; set; }
+        public int Total { get; set; }
+
+        public ListSuccessDetail(List<T> data, int total)
+        {
+            Success = true;
+            Data = data;
+            Total = total;
+        }
+    }
 }

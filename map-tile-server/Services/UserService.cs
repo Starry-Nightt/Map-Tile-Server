@@ -15,11 +15,39 @@ namespace map_tile_server.Services
             var database = mongoClient.GetDatabase(settings.DatabaseName);
             _usersCollection = database.GetCollection<User>(settings.UserCollectionName);
         }
-        public List<UserDetail> Gets()
+        public List<UserDetail> Gets(int page, int pageSize, string key)
         {
-            List<User> users = _usersCollection.Find(FilterDefinition<User>.Empty).ToList();
-            return users.Select(u => new UserDetail(u)).ToList();
+            List<User> users = _usersCollection.Find(u => u.FirstName.StartsWith(key) ).ToList();
+            if (key != null && key.Trim().Length > 0)
+            {
+                users = _usersCollection.Find(u => u.FirstName.StartsWith(key) || u.LastName.StartsWith(key)).ToList();
+            }
+            else
+            {
+                users = _usersCollection.Find(FilterDefinition<User>.Empty).ToList();
+            }
+            int totalUser = users.Count;
+            int totalPages = (int)Math.Ceiling((decimal)totalUser / pageSize);
+
+            List<UserDetail> userList = users.Skip((page - 1) * pageSize).Take(pageSize).Select(u => new UserDetail(u)).ToList();
+
+            return userList;
         }
+
+        public int GetCount(string key)
+        {
+            List<User> users = _usersCollection.Find(u => u.FirstName.StartsWith(key)).ToList();
+            if (key != null && key.Trim().Length > 0)
+            {
+                users = _usersCollection.Find(u => u.FirstName.StartsWith(key) || u.LastName.StartsWith(key)).ToList();
+            }
+            else
+            {
+                users = _usersCollection.Find(FilterDefinition<User>.Empty).ToList();
+            }
+            return users.Count;
+        }
+
         public User? GetById(string id)
         {
             var user = _usersCollection.Find(u => u.Id == id).FirstOrDefault();
