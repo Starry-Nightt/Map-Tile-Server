@@ -31,5 +31,15 @@ namespace map_tile_server.Models.Entities
             this.FirstName = data.FirstName;
             this.LastName = data.LastName;
         }
+
+        public User(RegisterDetail detail)
+        {
+            Email = detail.Email;
+            Password = detail.Password;
+            FirstName = detail.FirstName;
+            LastName = detail.LastName;
+            Role = "user";
+            Username = detail.Username;
+        }
     }
 }

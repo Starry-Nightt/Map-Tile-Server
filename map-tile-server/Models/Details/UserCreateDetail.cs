@@ -16,15 +16,5 @@ namespace map_tile_server.Models.Details
         public string Role { get; set; } = string.Empty;
         [Required(ErrorMessage = "Username is required")]
         public string Username { get; set; } = string.Empty;
-
-        public UserCreateDetail(RegisterDetail detail)
-        {
-            Email = detail.Email;
-            Password = detail.Password;
-            FirstName = detail.FirstName;
-            LastName = detail.LastName;
-            Role = "user";
-            Username = detail.Username;
-        }
     }
 }

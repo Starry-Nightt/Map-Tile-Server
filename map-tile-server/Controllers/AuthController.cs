@@ -62,7 +62,7 @@ namespace map_tile_server.Controllers
                 return BadRequest(new ErrorDetail((int)HttpStatusCode.BadRequest, "Username was used"));
             }
             detail.Password = _helperService.HashPassword(detail.Password);
-            var _user = new User(new UserCreateDetail(detail));
+            var _user = new User(detail);
             var newUser = _userService.Create(_user);
             return Ok(new SuccessDetail<UserDetail>(newUser));
         }

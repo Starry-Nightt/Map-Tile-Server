@@ -5,6 +5,7 @@ using map_tile_server.Models.Entities;
 using map_tile_server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System.Data;
 using System.Net;
 
@@ -52,6 +53,7 @@ namespace map_tile_server.Controllers
         public IActionResult Post([FromBody] UserCreateDetail detail)
         {
 
+            Log.Information("{@u}", detail);
             if (IsEmailExisting(detail.Email))
             {
                 return BadRequest(new ErrorDetail((int)HttpStatusCode.BadRequest, "Email was used"));
