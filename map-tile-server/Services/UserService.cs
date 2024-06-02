@@ -15,12 +15,12 @@ namespace map_tile_server.Services
             var database = mongoClient.GetDatabase(settings.DatabaseName);
             _usersCollection = database.GetCollection<User>(settings.UserCollectionName);
         }
-        public List<UserDetail> Gets(int page, int pageSize, string key)
+        public List<UserDetail> Gets(int page, int pageSize, string? key)
         {
-            List<User> users = _usersCollection.Find(u => u.FirstName.StartsWith(key) ).ToList();
+            List<User> users;
             if (key != null && key.Trim().Length > 0)
             {
-                users = _usersCollection.Find(u => u.FirstName.StartsWith(key) || u.LastName.StartsWith(key)).ToList();
+                users = _usersCollection.Find(u => u.FirstName.ToLower().StartsWith(key.ToLower()) || u.LastName.ToLower().StartsWith(key.ToLower())).ToList();
             }
             else
             {
@@ -34,12 +34,12 @@ namespace map_tile_server.Services
             return userList;
         }
 
-        public int GetCount(string key)
+        public int GetCount(string? key)
         {
-            List<User> users = _usersCollection.Find(u => u.FirstName.StartsWith(key)).ToList();
+            List<User> users;
             if (key != null && key.Trim().Length > 0)
             {
-                users = _usersCollection.Find(u => u.FirstName.StartsWith(key) || u.LastName.StartsWith(key)).ToList();
+                users = _usersCollection.Find(u => u.FirstName.ToLower().StartsWith(key.ToLower()) || u.LastName.ToLower().StartsWith(key.ToLower())).ToList();
             }
             else
             {

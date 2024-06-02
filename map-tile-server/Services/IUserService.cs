@@ -5,8 +5,8 @@ namespace map_tile_server.Services
 {
     public interface IUserService
     {
-        List<UserDetail> Gets(int page, int pageSize, string key);
-        int GetCount(string key);
+        List<UserDetail> Gets(int page, int pageSize, string? key);
+        int GetCount(string? key);
         User? GetByEmail(string email);
         User? GetById(string id);
         UserDetail? GetByEmailAndPassword(LoginDetail detail);

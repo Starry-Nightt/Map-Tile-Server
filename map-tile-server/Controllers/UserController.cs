@@ -25,7 +25,7 @@ namespace map_tile_server.Controllers
         }
 
         [HttpGet]
-        public IActionResult Gets( int page, int pageSize, string key = "")
+        public IActionResult Gets( int page, int pageSize, string? key)
         {
             var users = _userService.Gets(page, pageSize, key);
             var count = _userService.GetCount(key);
