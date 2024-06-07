@@ -6,5 +6,9 @@
         public string Name { get; set; } = string.Empty;
         public double Lng { get; set; }
         public double Lat { get; set; }
+        public string? Amenity { get; set; } = string.Empty;
+        public string? HouseName { get; set; } = string.Empty;
+        public string? HouseNumber { get; set; } = string.Empty;
+        public string? Place { get; set; } = string.Empty;
     }
 }

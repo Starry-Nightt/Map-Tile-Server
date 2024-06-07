@@ -20,7 +20,7 @@ namespace map_tile_server.Services
             List<User> users;
             if (key != null && key.Trim().Length > 0)
             {
-                users = _usersCollection.Find(u => u.FirstName.ToLower().StartsWith(key.ToLower()) || u.LastName.ToLower().StartsWith(key.ToLower())).ToList();
+                users = _usersCollection.Find(u => u.FirstName.ToLower().StartsWith(key.ToLower()) || u.LastName.ToLower().StartsWith(key.ToLower()) || u.Username.ToLower().StartsWith(key.ToLower())).ToList();
             }
             else
             {
@@ -39,7 +39,7 @@ namespace map_tile_server.Services
             List<User> users;
             if (key != null && key.Trim().Length > 0)
             {
-                users = _usersCollection.Find(u => u.FirstName.ToLower().StartsWith(key.ToLower()) || u.LastName.ToLower().StartsWith(key.ToLower())).ToList();
+                users = _usersCollection.Find(u => u.FirstName.ToLower().StartsWith(key.ToLower()) || u.LastName.ToLower().StartsWith(key.ToLower()) || u.Username.ToLower().StartsWith(key.ToLower())).ToList();
             }
             else
             {

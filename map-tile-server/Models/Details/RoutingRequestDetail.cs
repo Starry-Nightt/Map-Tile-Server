@@ -6,5 +6,6 @@
         public double startLng { get; set; }
         public double endLat { get; set; }
         public double endLng { get; set; }
+        public string type { get; set; } = string.Empty;
     }
 }

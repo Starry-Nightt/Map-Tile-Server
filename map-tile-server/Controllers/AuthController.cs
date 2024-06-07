@@ -22,11 +22,13 @@ namespace map_tile_server.Controllers
         private readonly IUserService _userService;
         private readonly IJwtSettings _jwtSettings;
         private readonly IHelperService _helperService;
-        public AuthController(IJwtSettings settings, IUserService userService, IHelperService helperService)
+        private readonly IEmailService _emailService;
+        public AuthController(IJwtSettings settings, IUserService userService, IHelperService helperService, IEmailService emailService)
         {
             _userService = userService;
             _jwtSettings = settings;
             _helperService = helperService;
+            _emailService = emailService;
         }
 
         [HttpPost("login")]
@@ -91,6 +93,20 @@ namespace map_tile_server.Controllers
             user.Password = _helperService.HashPassword(detail.NewPassword);
             _userService.Update(userDetail.Id, user);
             return NoContent();
+        }
+
+        [HttpPost("forgot-password")]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword([FromBody] ForgotPasswordDetail detail)
+        {
+            if (!IsEmailExisting(detail.Email))
+            {
+                var errorResponse = new ErrorDetail((int)HttpStatusCode.NotFound, $"User with email = {detail.Email} not found");
+                return NotFound(errorResponse);
+            }
+            var user = _userService.GetByEmail(detail.Email);
+            _emailService.SendEmailForgotPassword(detail.Email, user.Username);
+            return Ok();
         }
         private User? Authenticate(LoginDetail detail)
         {

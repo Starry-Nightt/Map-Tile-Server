@@ -32,8 +32,16 @@ namespace map_tile_server.Controllers
         [ServiceFilter(typeof(ValidationFilter))]
         public async Task<IActionResult> GetRoute([FromBody] RoutingRequestDetail detail)
         {
-            var result = await _osmService.GetRoute(detail.startLat, detail.startLng, detail.endLat, detail.endLng);
-            return Ok(new SuccessDetail<string>(result));
+            if (detail.type == "vehicle")
+            {
+                var result = await _osmService.GetRoute(detail.startLat, detail.startLng, detail.endLat, detail.endLng);
+                return Ok(new SuccessDetail<RoutingDetail>(result));
+            }
+            else
+            {
+                var result = await _osmService.GetRouteWalking(detail.startLat, detail.startLng, detail.endLat, detail.endLng);
+                return Ok(new SuccessDetail<RoutingDetail>(result));
+            }
         }
     }
 }

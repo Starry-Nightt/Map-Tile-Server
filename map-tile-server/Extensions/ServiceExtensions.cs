@@ -93,6 +93,7 @@ namespace map_tile_server.Extensions
             services.AddSingleton<IHelperService, HelperService>();
             services.AddSingleton<IMapService, MapService>();
             services.AddSingleton<IOsmService, OsmService>();
+            services.AddTransient<IEmailService, EmailService>();
         }
     }
 }

@@ -2,7 +2,6 @@
 {
     public interface IOsmDatabaseSettings
     {
-        public string LocationDatabaseConnection { get; set; }
-        public string RoutingDatabaseConnection { get; set; }
+        public string ConnectionString { get; set; }
     }
 }
