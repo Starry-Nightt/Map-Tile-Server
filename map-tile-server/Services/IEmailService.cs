@@ -1,7 +1,9 @@
-﻿namespace map_tile_server.Services
+﻿using map_tile_server.Models.Details;
+
+namespace map_tile_server.Services
 {
     public interface IEmailService
     {
-        void SendEmailForgotPassword(string email, string username);
+        Task SendEmailForgetPassword(MailRequest mailRequest);
     }
 }

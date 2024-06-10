@@ -95,19 +95,59 @@ namespace map_tile_server.Controllers
             return NoContent();
         }
 
-        [HttpPost("forgot-password")]
+        [HttpPost("forget-password")]
         [AllowAnonymous]
-        public IActionResult ForgotPassword([FromBody] ForgotPasswordDetail detail)
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDetail detail)
         {
-            if (!IsEmailExisting(detail.Email))
+            var user = _userService.GetByEmail(detail.Email);
+            if (user == null)
             {
                 var errorResponse = new ErrorDetail((int)HttpStatusCode.NotFound, $"User with email = {detail.Email} not found");
                 return NotFound(errorResponse);
             }
-            var user = _userService.GetByEmail(detail.Email);
-            _emailService.SendEmailForgotPassword(detail.Email, user.Username);
-            return Ok();
+            var tokenString = GenerateToken(user);
+            var otp = _userService.CreateOtp(user.Email);
+            MailRequest mail = new MailRequest
+            {
+                ToEmail = detail.Email,
+                Subject = $"OTP code: {otp.Code}",
+                Body = $"<p>Hello {user.Username}</p><p>This is your otp code: {otp.Code}</p>"
+            };
+
+            await _emailService.SendEmailForgetPassword(mail);
+            return Ok(new SuccessDetail<string>(tokenString));
         }
+
+        [HttpPost("validate-otp")]
+        [AllowAnonymous]
+        public IActionResult ValidateOtp([FromBody] ValidateOtpDetail detail)
+        {
+            var userInfo = GetCurrentUser();
+            if (userInfo == null || userInfo.Id == null) return Unauthorized(new ErrorDetail((int)HttpStatusCode.Unauthorized, "Invalid token"));
+            var email = userInfo.Email;
+            bool valid = _userService.ValidateOtp(email, detail.Otp);
+            if (valid)
+            {
+                _userService.DeleteOtp(email, detail.Otp);
+                return Ok(new SuccessDetail<string?>(null));
+            }
+            return Unauthorized(new ErrorDetail((int)HttpStatusCode.Unauthorized, "Wrong Otp code"));
+        }
+
+        [HttpPost("reset-password")]
+        [AllowAnonymous]
+        public IActionResult ResetPassword([FromBody] ResetPasswordDetail detail)
+        {
+            var userDetail = GetCurrentUser();
+            if (userDetail == null) return Unauthorized(new ErrorDetail((int)HttpStatusCode.Unauthorized, "Invalid token"));
+            var user = _userService.GetById(userDetail.Id);
+
+            user.Password = _helperService.HashPassword(detail.NewPassword);
+            _userService.Update(userDetail.Id, user);
+            return NoContent();
+        }
+
+
         private User? Authenticate(LoginDetail detail)
         {
 

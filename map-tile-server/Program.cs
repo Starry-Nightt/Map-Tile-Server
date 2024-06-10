@@ -9,6 +9,7 @@ builder.Services.AddLogger(builder.Host);
 builder.Services.ConfigureMongoDatabaseSettings(builder.Configuration);
 builder.Services.ConfigureMapTileServer(builder.Configuration);
 builder.Services.ConfigureOsmDatabaseSettings(builder.Configuration);
+builder.Services.ConfigureEmailSettings(builder.Configuration);
 // Add services to the container.
 builder.Services.ConfigureServices();
 builder.Services.AddControllers();

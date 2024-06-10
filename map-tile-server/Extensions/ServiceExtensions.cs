@@ -54,6 +54,13 @@ namespace map_tile_server.Extensions
             services.Configure<OsmDatabaseSettings>(configuration.GetSection("OsmDatabaseSettings"));
             services.AddSingleton<IOsmDatabaseSettings>(s => s.GetRequiredService<IOptions<OsmDatabaseSettings>>().Value);
         }
+
+        public static void ConfigureEmailSettings(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+            services.AddSingleton<IEmailSettings>(s => s.GetRequiredService<IOptions<EmailSettings>>().Value);
+        }
+
         public static void AddLogger(this IServiceCollection services, IHostBuilder host)
         {
             Log.Logger = new LoggerConfiguration().WriteTo.Console(new JsonFormatter()).CreateLogger();

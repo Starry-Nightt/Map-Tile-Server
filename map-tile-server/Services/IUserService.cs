@@ -15,5 +15,10 @@ namespace map_tile_server.Services
         void Update(string id, User user);
         void Delete(string id);
 
+        Otp CreateOtp(string email);
+        void DeleteOtp(string email, string code);
+
+        bool ValidateOtp(string email, string code);
+
     }
 }

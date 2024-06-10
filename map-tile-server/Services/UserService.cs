@@ -9,11 +9,13 @@ namespace map_tile_server.Services
     public class UserService : IUserService
     {
         private readonly IMongoCollection<User> _usersCollection;
+        private readonly IMongoCollection<Otp> _otpCollection;
 
         public UserService(IDatabaseSettings settings, IMongoClient mongoClient)
         {
             var database = mongoClient.GetDatabase(settings.DatabaseName);
             _usersCollection = database.GetCollection<User>(settings.UserCollectionName);
+            _otpCollection = database.GetCollection<Otp>(settings.OtpCollectionName);
         }
         public List<UserDetail> Gets(int page, int pageSize, string? key)
         {
@@ -83,5 +85,31 @@ namespace map_tile_server.Services
             _usersCollection.DeleteOne(u => u.Id == id);
         }
 
+        public Otp CreateOtp(string email)
+        {
+            var otp = new Otp { Email = email, Code = GenerateRandomNumberString() };
+            _otpCollection.InsertOne(otp);
+            return otp;
+        }
+
+        public void DeleteOtp(string email, string code)
+        {
+            var otp = _otpCollection.Find(o => o.Email == email && o.Code == code).FirstOrDefault();
+            if (otp != null)
+                _otpCollection.DeleteOne(o => o.Id == otp.Id);
+        }
+
+        public bool ValidateOtp(string email, string code)
+        {
+            var otp = _otpCollection.Find(o => o.Email == email && o.Code == code).FirstOrDefault();
+            return otp != null;
+        }
+
+        public string GenerateRandomNumberString()
+        {
+            Random random = new Random();
+            string randomString = random.Next(100000, 1000000).ToString("D6");
+            return randomString;
+        }
     }
 }
