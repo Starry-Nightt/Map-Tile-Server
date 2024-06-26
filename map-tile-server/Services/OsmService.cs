@@ -25,7 +25,7 @@ namespace map_tile_server.Services
             {
                 await connection.OpenAsync();
                 string query = $"SELECT name, cast(osm_id as text) AS id, ST_X(ST_Transform(way, 4326)) AS longitude, ST_Y(ST_Transform(way, 4326)) AS latitude, amenity, addrhousename, addrhousenumber, place " +
-                    $"FROM planet_osm_point where name ilike '%{key}%' order by place limit 5";
+                    $"FROM planet_osm_point where name ilike '%{key.Trim()}%' order by place limit 5";
                 using (var command = new NpgsqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())

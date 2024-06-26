@@ -32,6 +32,7 @@ namespace map_tile_server.Controllers
         }
 
         [HttpGet("{userId}")]
+        [Authorize(Roles = "user, admin")]
         public IActionResult Gets(string userId)
         {
             var geos = _mapService.GetsByUser(userId);
@@ -39,6 +40,7 @@ namespace map_tile_server.Controllers
         }
 
         [HttpPost("{userId}")]
+        [Authorize(Roles = "user, admin")]
         public IActionResult Post(string userId, [FromBody] GeoCreateDetail detail)
         {
             var geoData = _mapService.Create(userId, detail);
@@ -46,6 +48,7 @@ namespace map_tile_server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "user, admin")]
         public IActionResult Delete(string id)
         {
             _mapService.Delete(id);
@@ -53,6 +56,7 @@ namespace map_tile_server.Controllers
         }
 
         [HttpDelete("clear/{userId}")]
+        [Authorize(Roles = "user, admin")]
         public IActionResult DeleteAllByUserId(string userId)
         {
             _mapService.DeleteAll(userId);

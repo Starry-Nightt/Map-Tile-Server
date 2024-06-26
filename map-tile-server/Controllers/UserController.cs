@@ -53,7 +53,6 @@ namespace map_tile_server.Controllers
         public IActionResult Post([FromBody] UserCreateDetail detail)
         {
 
-            Log.Information("{@u}", detail);
             if (IsEmailExisting(detail.Email))
             {
                 return BadRequest(new ErrorDetail((int)HttpStatusCode.BadRequest, "Email was used"));
