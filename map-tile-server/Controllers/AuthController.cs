@@ -173,7 +173,7 @@ namespace map_tile_server.Controllers
             var token = new JwtSecurityToken(_jwtSettings.Issuer,
               _jwtSettings.Audience,
               claims,
-              expires: DateTime.Now.AddMinutes(120),
+              expires: DateTime.Now.AddMinutes(1440),
               signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
