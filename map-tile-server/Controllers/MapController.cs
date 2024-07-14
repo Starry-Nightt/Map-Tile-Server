@@ -47,6 +47,13 @@ namespace map_tile_server.Controllers
             return Ok(new SuccessDetail<Geo>(geoData));
         }
 
+        [HttpPut("{id}")]
+        public IActionResult Put(string id, [FromBody] GeoBodyDetail detail)
+        {
+            _mapService.Update(id, detail);
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         [Authorize(Roles = "user, admin")]
         public IActionResult Delete(string id)

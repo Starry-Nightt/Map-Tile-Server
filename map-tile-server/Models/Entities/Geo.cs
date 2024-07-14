@@ -36,11 +36,13 @@ namespace map_tile_server.Models.Entities
     public class GeoProperties
     {
         [BsonElement("id")]
-        public string Id { get; set; } = String.Empty;
+        public string Id { get; set; } = string.Empty;
         [BsonElement("userId")]
-        public string UserId { get; set;} = String.Empty;
+        public string UserId { get; set;} = string.Empty;
         [BsonElement("radius")]
         public double? Radius { get; set; }
+        [BsonElement("body")]
+        public GeoBodyDetail? Body { get; set; }
 
         public GeoProperties(string id, string userId)
         {

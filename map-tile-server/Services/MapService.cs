@@ -47,6 +47,13 @@ namespace map_tile_server.Services
             return geo;
         }
 
+        public void Update(string id, GeoBodyDetail detail)
+        {
+            var geo = _geoCollection.Find(g => g.Id == id).FirstOrDefault();
+            geo.Properties.Body = detail;
+            _geoCollection.ReplaceOne(g => g.Id == id, geo);
+        }
+
         public void Delete(string id)
         {
             _geoCollection.DeleteOne(g => g.Id == id);

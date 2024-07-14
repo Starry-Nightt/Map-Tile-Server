@@ -10,6 +10,7 @@ namespace map_tile_server.Services
         List<Geo> GetsByUser(string userId);
 
         Geo Create(string userId, GeoCreateDetail detail);
+        void Update(string id, GeoBodyDetail detail);
 
         void Delete(string id);
 
